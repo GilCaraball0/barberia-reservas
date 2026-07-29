@@ -1,0 +1,16 @@
+language: java
+
+jdk:
+  - openjdk17
+
+branches:
+  only:
+    - develop
+    - master
+
+script:
+  - mvn -B test
+
+cache:
+  directories:
+    - "$HOME/.m2"

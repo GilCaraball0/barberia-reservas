@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Santiago Barber Lounge — Panel del barbero</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<div class="navbar">
+  <div class="brand">Santiago Barber Lounge</div>
+  <nav>
+    <a href="/">Sitio de clientes</a>
+  </nav>
+</div>
+
+<div id="login-view">
+  <form class="login-wrap" id="form-login">
+    <h2 style="margin-top:0;">Panel del barbero</h2>
+    <p style="color:var(--cream-dim); font-size:0.85rem;">Inicia sesión para ver tu agenda del día.</p>
+    <div class="campo">
+      <label for="usuario">Usuario</label>
+      <input type="text" id="usuario" required placeholder="admin">
+    </div>
+    <div class="campo">
+      <label for="contrasena">Contraseña</label>
+      <input type="password" id="contrasena" required placeholder="••••••••">
+    </div>
+    <button type="submit" class="btn" style="width:100%;">Entrar</button>
+    <div class="mensaje" id="mensaje-login"></div>
+  </form>
+</div>
+
+<div class="panel" id="panel-view" style="display:none;">
+  <div class="section-title" style="text-align:left; margin-bottom:26px;">
+    <div class="eyebrow">Panel del barbero</div>
+    <h2>Agenda del día</h2>
+  </div>
+
+  <div class="panel-filtros">
+    <div class="campo">
+      <label for="filtro-barbero">Barbero</label>
+      <select id="filtro-barbero"></select>
+    </div>
+    <div class="campo">
+      <label for="filtro-fecha">Fecha</label>
+      <input type="date" id="filtro-fecha">
+    </div>
+    <button class="btn secondary" id="btn-consultar">Consultar agenda</button>
+  </div>
+
+  <table class="agenda">
+    <thead>
+      <tr><th>Hora</th><th>Cliente</th><th>Servicio</th><th></th></tr>
+    </thead>
+    <tbody id="agenda-body"></tbody>
+  </table>
+</div>
+
+<script src="/js/admin.js"></script>
+</body>
+</html>
