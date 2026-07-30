@@ -1,16 +1,12 @@
 language: java
-
 jdk:
   - openjdk17
-
 branches:
   only:
-    - develop
+    - desarrollo
     - master
-
 script:
-  - mvn -B test
-
+  - mvn clean test
 cache:
   directories:
     - "$HOME/.m2"
