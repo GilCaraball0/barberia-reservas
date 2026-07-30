@@ -41,6 +41,10 @@ mvn -B test
 # 2. Genera el archivo ejecutable .jar en la carpeta target
 mvn -B package
 
+Sprint 1 completado con éxito.
+
+
+
 # 3. Inicia el servidor web
 java -jar target/barberia-reservas.jar
 ```
