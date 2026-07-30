@@ -10,3 +10,5 @@ script:
 cache:
   directories:
     - "$HOME/.m2"
+
+# Integracion automatica final SBL
