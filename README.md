@@ -1,47 +1,35 @@
-# Santiago Barber Lounge - Sistema de Reservas
-Bienvenido al repositorio del Sistema de Reservas para Santiago Barber Lounge. Este proyecto se encuentra actualmente en su Fase III, bajo el ciclo de madurez de producto Version Beta.
+# Sistema de Reservas - Santiago Barber Lounge (Fase III)
 
-El sistema gestiona la reserva de turnos, la disponibilidad de barberos y expone un servidor web ligero para la visualización de servicios.
-
----
+Este repositorio contiene la implementación de la Fase III del Sistema de Reservas Web para Santiago Barber Lounge, desarrollado como una aplicación web Java empresarial basada en arquitectura desacoplada.
 
 ## Arquitectura de la Solución
-La solucion ha sido disenada bajo una arquitectura desacoplada:
-* Servidor de Aplicacion: Desarrollado en Java SE, gestionando modulos de Citas, Clientes y Autenticacion en memoria.
-* Servidor Web Embebido: Implementado mediante com.sun.net.httpserver en el puerto 8080, exponiendo endpoints en formato JSON.
-* Sistema de Repositorios: Administrado en GitHub utilizando la estrategia de ramificacion estructurada (master y develop).
-* Integracion Continua (CI): Conectado con Travis-CI para la ejecucion de pruebas unitarias automatizadas.
-
----
+La solución ha sido diseñada bajo una arquitectura desacoplada organizada en tres capas principales:
+*   Frontend: Interfaz gráfica web adaptativa maquetada con HTML5 y CSS nativo corporativo (negro mate y dorado) integrada en index.jsp, con compatibilidad para Google Chrome y Edge.
+*   Controlador (Backend): Servlets de Java (ServiciosServlet) encargados de interceptar y parsear las peticiones HTTP POST del cliente, corriendo sobre el servidor de aplicaciones Apache Tomcat.
+*   Lógica de Negocio: Clase centralizada CitaService que procesa las reglas operativas, control de horarios fijos y prevención estricta de dobles reservas.
+*   Capa de Almacenamiento (Persistencia): Colecciones dinámicas indexadas en memoria RAM (ArrayList) administradas con precisión financiera mediante la clase java.math.BigDecimal.
 
 ## Alcance del Producto
 
-### Incluido en la Version Actual (Beta)
-* Gestion de Clientes: Registro basico de clientes en memoria.
-* Modulo de Servicios: Catalogo inicial de servicios de la barberia con precios y tiempos de duracion.
-* Control de Citas y Disponibilidad: Registro, modificacion y cancelacion de citas validando activamente conflictos de horarios por barbero.
-* Seguridad Basica: Modulo de autenticacion simple en memoria para roles administrativos.
-* Servidor de Servicios: Exposicion del endpoint GET /servicios para consumo web.
-* Pruebas Automatizadas: Suite de pruebas unitarias implementadas con JUnit.
+### Incluido en la Versión Actual
+*   RF1 — Registro de Clientes: Captura y sanitización de información básica de contacto (Nombre y Teléfono).
+*   RF2 — Reservar Cita: Gestión de turnos en bloques fijos de 30 minutos en hora militar.
+*   RF3 — Cancelar Cita: Remoción de reservas de la colección liberando disponibilidad del empleado.
+*   RF4 — Modificar Cita: Modificación de parámetros activando prevención de dobles citas.
+*   RF5 — Visualizar Agenda: Despliegue estructurado de reservas activas filtradas por barbero y día de atención.
+*   RF6 — Mostrar Servicios: Catálogo interactivo de servicios con manejo preciso de costos mediante BigDecimal.
+*   RF8 — Capa de Logica de Negocio CitaService: Encapsulamiento de reglas comerciales en el backend Java.
+*   RF9 — Controlador de Peticiones ServiciosServlet: Extensión de HttpServlet para el canal limpio cliente-servidor.
+*   RF10 — Modulo de Pruebas Unitarias JUnit 5: Suite de automatización de pruebas lógicas críticas.
+*   RF11 — Interfaz Grafica Web Adaptativa SBL: Maquetación responsiva integrada en index.jsp con controles nativos de autenticación y acceso restringido por contraseña para barberos.
 
-### Excluido (Postergado para la Version General Availability - GA)
-* Persistencia de Datos: Migracion del almacenamiento de memoria hacia un sistema de base de datos relacional (MySQL).
-* Seguridad Avanzada: Cifrado criptografico de contrasenas de administracion mediante algoritmos robustos (BCrypt).
-* Interfaz Grafica Completa: Migracion del servidor web basico hacia un framework empresarial (Spring Boot / Tomcat Embebido) con frontend interactivo.
+### Excluido (Postergado / Trabajo Futuro)
+*   RF7 — Notificación de Cita: Envío automático de confirmaciones y recordatorios a través de medios digitales (correo electrónico o SMS). Requiere integración avanzada de APIs de mensajería externas (como Twilio o SendGrid) e hilos asíncronos en el servidor Tomcat. Queda congelado en el Backlog.
 
----
+## Organización del Repositorio y Flujo Git
+El proyecto sigue una estrategia de flujo de trabajo estructurada en dos ramas principales obligatorias para garantizar el control de cambios:
+*   master: Contiene el código de la versión final estable listo para producción (Hito General Availability - GA).
+*   develop: Canal central donde se realiza la integración del trabajo en progreso y código base de desarrollo (Hito Beta).
 
-## Requisitos Previos y Ejecución
-Para compilar y ejecutar localmente esta version del software desde la terminal:
-
-```bash
-# 1. Corre las pruebas unitarias JUnit
-mvn -B test
-
-# 2. Genera el archivo ejecutable .jar en la carpeta target
-mvn -B package
-
-# 3. Inicia el servidor web
-java -jar target/barberia-reservas.jar
-```
-Una vez iniciado, acceda a la lista de servicios abriendo su navegador web en: http://localhost:8080/servicios
+## Integración Continua (CI)
+El repositorio se encuentra integrado de forma nativa con GitHub Actions a través del flujo automatizado definido en maven.yml. Ante cada Push o Pull Request hacia las ramas master o develop, el motor en la nube levanta un entorno virtual Linux con soporte para OpenJDK 17 y Maven, ejecutando de manera autónoma el comando técnico 'mvn -B clean test'. Esto valida la suite de pruebas unitarias automatizadas con JUnit 5, garantizando la estabilidad de la lógica de negocio ante cambios concurrentes antes de permitir cualquier fusión de código.
