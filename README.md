@@ -5,7 +5,7 @@ Este repositorio contiene la implementación de la Fase III del Sistema de Reser
 ## Arquitectura de la Solución
 La solución ha sido diseñada bajo una arquitectura desacoplada organizada en tres capas principales:
 *   Frontend: Interfaz gráfica web adaptativa maquetada con HTML5 y CSS nativo corporativo (negro mate y dorado) integrada en index.jsp, con compatibilidad para Google Chrome y Edge.
-*   Controlador (Backend): Servlets de Java (ServiciosServlet) encargados de interceptar y parsear las peticiones HTTP POST del cliente, corriendo sobre el servidor de aplicaciones Apache Tomcat.
+*   Controlador (Backend): Servlet de Java (ServiciosServlet) que expone el catálogo de servicios en formato JSON vía HTTP GET; el procesamiento directo de reservas mediante POST forma parte del roadmap de integración         técnica backend.
 *   Lógica de Negocio: Clase centralizada CitaService que procesa las reglas operativas, control de horarios fijos y prevención estricta de dobles reservas.
 *   Capa de Almacenamiento (Persistencia): Colecciones dinámicas indexadas en memoria RAM (ArrayList) administradas con precisión financiera mediante la clase java.math.BigDecimal.
 
