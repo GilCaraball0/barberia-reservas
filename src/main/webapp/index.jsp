@@ -396,7 +396,7 @@
     <script>
         var registroCitasGlobal = [
             { fecha: "2026-07-31", hora: "12:30", barbero: "mateo", cliente: "Carlos Rivera", servicio: "Paquete premium - $70 (1 hora)" },
-            { fecha: "2026-07-31", hora: "15:00", barbero: "mateo", cliente: "Luis Cancel", servicio: "Corte clasico - $25 (45 min)" },
+            { fecha: "2026-07-31", hora: "15:00", barbero: "mateo", cliente: "Luis Vargas", servicio: "Corte clasico - $25 (45 min)" },
             { fecha: "2026-08-01", hora: "13:00", barbero: "oscar", cliente: "Enrique Ortiz", servicio: "Fade - $40 (50 min)" },
             { fecha: "2026-08-01", hora: "17:30", barbero: "oscar", cliente: "Yamil Suárez", servicio: "Fade - $40 (50 min)" },
             { fecha: "2026-08-02", hora: "14:00", barbero: "gilberto", cliente: "Ramón Mendez", servicio: "Corte clasico - $25 (45 min)" },
@@ -435,7 +435,7 @@
                     servicio: servicioTexto 
                 });
                 
-                alert("¡RESERVA AGENDADA CON ÉXITO!\n\nSu cita con " + barberoValue.toUpperCase() + " para el día " + fecha + " a las " + hora + " ha sido procesada de forma segura en la memoria del servidor.");
+                alert("¡RESERVA AGENDADA CON ÉXITO!\n\nSu cita con " + barberoValue.toUpperCase() + " para el día " + fecha + " a las " + hora + " ha sido validada y guardada en esta sesión.");
                 document.getElementById('form-reserva').reset();
                 simularFiltrado();
             }
@@ -497,7 +497,122 @@
             document.getElementById('fecha').setAttribute('min', fechaMinima);
         });
     </script>
+    <!-- PANEL DE CONTROL FLOTANTE INDESTRUCTIBLE PARA MODIFICAR Y CANCELAR CITAS -->
+<div id="menu-control-barbero" style="position: fixed; top: 20px; right: 20px; background-color: #111111; border: 2px solid #D4AF37; border-radius: 8px; padding: 20px; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3); z-index: 9999; width: 300px; display: none; color: white; font-family: Arial, sans-serif;">
+    <h3 style="color: #D4AF37; margin-top: 0; text-transform: uppercase; font-size: 14px; text-align: center; letter-spacing: 1px;">Acciones de Control</h3>
+    
+    <div style="margin-bottom: 12px;">
+        <label style="color: #D4AF37; font-size: 12px; font-weight: bold; display: block; margin-bottom: 4px;">Seleccionar Cita:</label>
+        <select id="select-cita-menu" style="width: 100%; padding: 6px; background-color: #222222; border: 1px solid #444444; color: white; border-radius: 4px; font-size: 12px;">
+            <option value="0">Cita 1: Carlos Rivera (12:30)</option>
+            <option value="1">Cita 2: Luis Vargas (15:00)</option>
+            <option value="2">Cita 3: Rey Soto (14:00)</option>
+            <option value="3">Cita 4: Ramón Méndez (14:00)</option>
+            <option value="4">Cita 5: José Delgado (16:30)</option>
+            <option value="5">Cita 6: Yamil Suárez (17:30)</option>
+            <option value="6">Cita 7: Ángel Torres (19:00)</option>
+
+            
+        </select>
+    </div>
+
+    <div style="margin-bottom: 12px;">
+        <label style="color: #D4AF37; font-size: 12px; font-weight: bold; display: block; margin-bottom: 4px;">Nuevo Horario:</label>
+        <input type="datetime-local" id="nueva-hora-menu" style="width: 95%; padding: 6px; background-color: #222222; border: 1px solid #D4AF37; color: white; border-radius: 4px; font-size: 12px;">
+    </div>
+
+    <div style="display: flex; justify-content: space-between; margin-top: 15px;">
+        <button id="btn-cancelar-menu" style="background-color: #ff4444; color: white; border: none; padding: 8px 15px; font-weight: bold; border-radius: 4px; cursor: pointer; width: 45%; font-size: 12px;">Cancelar Cita</button>
+        <button id="btn-modificar-menu" style="background-color: #ffbb00; color: black; border: none; padding: 8px 15px; font-weight: bold; border-radius: 4px; cursor: pointer; width: 45%; font-size: 12px;">Modificar</button>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // 1. Monitoreamos cuando el usuario entra a la vista del barbero para mostrar el menú
+    var barberoView = document.getElementById("barbero-view");
+    var menuFlotante = document.getElementById("menu-control-barbero");
+
+    // Verificar cambios de visibilidad mediante un intervalo rápido para asegurar que aparezca
+    setInterval(function() {
+        if (barberoView && (barberoView.style.display === "block" || barberoView.classList.contains("active") || window.getComputedStyle(barberoView).display !== "none")) {
+            menuFlotante.style.display = "block";
+        } else {
+            menuFlotante.style.display = "none";
+        }
+    }, 500);
+
+    // 2. LÓGICA DEL BOTÓN CANCELAR
+    document.getElementById("btn-cancelar-menu").onclick = function(e) {
+        e.preventDefault();
+        var index = document.getElementById("select-cita-menu").value;
+        var filas = document.querySelectorAll("#tabla-citas-body tr");
+        
+        if (filas[index]) {
+            if (confirm("¿Seguro que deseas cancelar esta reserva de la barbería?")) {
+                filas[index].remove(); // Elimina la fila físicamente de la pantalla
+                alert("La cita seleccionada fue cancelada correctamente de la memoria RAM.");
+                actualizarSelector();
+            }
+        }
+    };
+
+    // 3. LÓGICA DEL BOTÓN MODIFICAR
+    document.getElementById("btn-modificar-menu").onclick = function(e) {
+        e.preventDefault();
+        var index = document.getElementById("select-cita-menu").value;
+        var nuevaHoraInput = document.getElementById("nueva-hora-menu").value;
+        var filas = document.querySelectorAll("#tabla-citas-body tr");
+
+        if (!nuevaHoraInput) {
+            alert("Por favor, selecciona una nueva fecha y hora en el calendario.");
+            return;
+        }
+
+        if (filas[index]) {
+            var celdas = filas[index].querySelectorAll("td");
+            if (celdas.length >= 5) {
+                // El formato de datetime-local es: YYYY-MM-DDTHH:MM
+                var partes = nuevaHoraInput.split("T");
+                var fechaFormateada = partes[0].split("-").reverse().join("/"); // Pasa a DD/MM/YYYY
+                var horaFormateada = partes[1]; // HH:MM
+
+                // Modificamos directamente las columnas de la tabla estática
+                celdas[0].innerText = fechaFormateada; // Columna Fecha
+                celdas[1].innerText = horaFormateada;  // Columna Hora
+
+                // Actualizamos el estado visual
+                var badge = celdas[4].querySelector(".status-badge") || celdas[4];
+                badge.innerText = "Modificada";
+                badge.style.backgroundColor = "#ffbb00";
+                badge.style.color = "#000000";
+
+                alert("El horario de la cita fue actualizado con éxito en la memoria.");
+            }
+        }
+    };
+
+    function actualizarSelector() {
+        var selector = document.getElementById("select-cita-menu");
+        selector.innerHTML = "";
+        var filasRestantes = document.querySelectorAll("#tabla-citas-body tr");
+        filasRestantes.forEach(function(fila, idx) {
+            var celdas = fila.querySelectorAll("td");
+            if (celdas.length >= 3) {
+                var option = document.createElement("option");
+                option.value = idx;
+                option.innerText = "Cita " + (idx + 1) + ": " + celdas[2].innerText + " (" + celdas[1].innerText + ")";
+                selector.appendChild(option);
+            }
+        });
+        if (filasRestantes.length === 0) {
+            menuFlotante.style.display = "none";
+        }
+    }
+});
+</script>
+
 </body>
 </html>
 
-        
+  
