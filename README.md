@@ -1,4 +1,4 @@
-# Sistema de Reservas - Santiago Barber Lounge (Fase III)
+# Sistema de Reservas - Santiago Barber Lounge (Fase IV)
 
 Este repositorio contiene la implementación de la Fase III del Sistema de Reservas Web para Santiago Barber Lounge, desarrollado como una aplicación web Java empresarial basada en arquitectura desacoplada.
 
